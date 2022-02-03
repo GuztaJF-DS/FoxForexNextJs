@@ -1,0 +1,344 @@
+/*
+  For Testing Boundaries 
+  border:1px red solid;
+*/
+.app{
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  flex-direction: column;
+}
+.toDesktop{
+  flex-direction: row;
+}
+
+/*--------------------------------------------------------------------------------------------*/
+/*----------------------------------------Header----------------------------------------------*/
+/*--------------------------------------------------------------------------------------------*/
+
+.header{
+  width: 100%;
+  background-color: #3C4B59;
+  text-align: center;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.header > .foxforextext{
+  font-size: 1.5em;
+  margin-bottom: 2px;
+  margin-top: -4px;
+  font-weight: 900;
+}
+
+.header > .CurrentUserData{
+  width: 60%;
+  margin-left: 20%;
+  font-size: 0.7em;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+/*--------------------------------------------------------------------------------------------*/
+/*--------------------------------------GraphicPart-------------------------------------------*/
+/*--------------------------------------------------------------------------------------------*/
+
+.GraphicPart > .CurrencyName{
+  font-size:1.3em;
+  font-weight: 800;
+  margin-top: 10px;
+}
+
+.Graphic{
+  height:30vh;
+}
+
+/*--------------------------------------------------------------------------------------------*/
+/*-------------------------------------Bid and Offer------------------------------------------*/
+/*--------------------------------------------------------------------------------------------*/
+
+.BidAndOffer{
+  display: flex;
+  width:85%;
+  margin-left: 7.5%;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: 10px;
+  align-items: flex-start;
+}
+
+.BidAndOffer >div{
+  width: 33.3%;
+  font-size: 1.1em;
+}
+
+.Bid{
+  
+  text-align: start;
+}
+
+.Offer{
+  text-align: end;
+}
+
+/*--------------------------------------------------------------------------------------------*/
+/*----------------------------------------Exchange--------------------------------------------*/
+/*--------------------------------------------------------------------------------------------*/
+
+.Exchange>p{
+  margin-top:10px;
+  margin-bottom:10px;
+  font-weight: lighter;
+}
+
+
+.Buttons>input{
+  background-color: #DADADA;
+  font-size: 1.1em;
+  height:35px;
+  width: 35vw;
+  border-style: none;
+  border-radius:5px;
+  margin-left: 10px;
+  margin-right  : 10px;
+  text-align: center;
+}
+
+.Buttons>button{
+  font-size: 1.1em;
+  height: 35px;
+  width: 80px;
+  border-style: none;
+  border-radius:5px;
+  font-weight: 600;
+}
+
+.ExchangeButton{
+  background-color: #317BA5;
+  color: #ffffff;
+  margin-top:10px;
+  font-size: 1.1em;
+  height: 35px;
+  width: 160px;
+  border-style: none;
+  border-radius:5px;
+  font-weight: 600;
+}
+
+.ExchangeButton:hover{
+  background-color: #235876;
+}
+
+
+.SellButton{
+  background-color: #A53131;
+  color: #ffffff; 
+}
+.SellButton:hover{
+  background-color: #762323;
+}
+.BuyButton{
+  background-color: #4FA531;
+  color: #ffffff; 
+}
+.BuyButton:hover{
+  background-color:  #397623;
+  color: #ffffff; 
+}
+
+/*--------------------------------------------------------------------------------------------*/
+/*---------------------------------------Past Trades------------------------------------------*/
+/*--------------------------------------------------------------------------------------------*/
+
+.PastTrades{
+  margin-bottom:15px;
+}
+
+.PastTrades>p{
+  font-size:1.1em;
+  margin-top:15px;
+  margin-bottom:10px;
+}
+
+
+.Table{
+  font-size: 0.8em;
+  border:2px #b3b3b3 solid;
+  background-color:#E1E1E1;
+  color: #363535;
+  width:90%;
+  margin-left: 5%;
+  height:235px;
+  border-radius: 15px;  
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-content: center;
+}
+
+.Table::-webkit-scrollbar {
+  display:none;
+}
+
+.TableHead{
+  background-color:#E1E1E1;
+  width: 89.9%;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+}
+
+.TableHeadMask{
+  margin-bottom: 12px;
+  width: 100%;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+}
+
+.Titles{
+  font-size: 0.9em;
+  margin-top: 2px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  width: 100%;
+}
+.Titles>div{
+  width: 25%;
+}
+
+.Titles>.ExchangeTitle{
+  width:25%;
+}
+
+.line{
+  height: 0px;
+  width: 100%;
+  margin-bottom: 5px;
+  margin-top: 5px;
+  border:1px #585858 solid;
+}
+
+.Content{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 5px;
+  margin-bottom: 4.2px;
+} 
+
+
+.Content>div{
+  width: 25%;
+}
+
+.Content>.ExchangeType{
+  width:25%;  
+}
+
+@media (max-width: 358px){
+  .TableHead{
+    background-color:#E1E1E1;
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+  }
+  
+  .TableHeadMask{
+    margin-bottom: 26px;
+    width: 100%;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+  }
+
+  .Content{
+    align-items: start;
+  }
+}
+@media (min-width:770px){
+
+@media (max-width:900px){
+  .TableHeadMask{ 
+    padding-bottom: 15px;  
+  }
+}
+
+
+  .desktopLeft{
+    float: left;
+    width: 60%;
+  }
+  .desktopRight{
+    float: right;
+    width: 40%;
+    height: 100%;
+  }
+
+/*--------------------------------------------------------------------------------------------*/
+/*--------------------------------------GraphicPart-------------------------------------------*/
+/*--------------------------------------------------------------------------------------------*/
+
+.Graphic{
+  margin-left: 3%;
+  height:75vh;
+}
+
+/*--------------------------------------------------------------------------------------------*/
+/*-------------------------------------Bid and Offer------------------------------------------*/
+/*--------------------------------------------------------------------------------------------*/
+
+.BidAndOffer{
+  align-items: start;
+}
+
+/*--------------------------------------------------------------------------------------------*/
+/*----------------------------------------Exchange--------------------------------------------*/
+/*--------------------------------------------------------------------------------------------*/
+
+.Buttons>input{
+  width: 10vw;
+}
+
+/*--------------------------------------------------------------------------------------------*/
+/*---------------------------------------Past Trades------------------------------------------*/
+/*--------------------------------------------------------------------------------------------*/  
+
+.TableHead{
+  background-color:#E1E1E1;
+  width: 35.9%;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+}
+
+.TableHeadMask{
+  margin-bottom: 8px;
+  width: 100%;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+}
+
+.Table{
+  font-size: 0.8em;
+  border:2px #b3b3b3 solid;
+  background-color:#E1E1E1;
+  color: #363535;
+  width:90%;
+  margin-left: 5%;
+  height:50vh;
+  border-radius: 15px;  
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-content: center;
+}
+}
