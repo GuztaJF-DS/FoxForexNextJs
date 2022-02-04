@@ -1,6 +1,9 @@
 import styles from '../../styles/Main.module.css'
 import { useState,useEffect } from 'react';
 import api from '../api/AxiosConnection'
+import PipFunction from '../functions/pipFunction'
+import SwapFunction from '../functions/swapFunctions'
+import FinalProfitFunction from '../functions/finalProfitFunction'
 
 interface IForexTypes{
     symbol:string;
@@ -43,18 +46,52 @@ function HandleBuyOrSell(type:boolean,LotsInput:string,CurrencyData:IForexTypes,
   return "0";
 }
 
-function HandleExchange(profitValues:Profit,id:string){
+async function HandleExchange(id:string,CurrencyData:IForexTypes){
   let now = new Date().toISOString()
+  let TradeData=await SearchforTheLastTrade(id)
+  console.log(TradeData)
+  let profitValues=CalculateProfit(TradeData,CurrencyData)
 
   let query={Profit:profitValues.FinalProfit,FinalDate:now,PipQtd:profitValues.PipQtd,PipPrice:profitValues.PipPrice,userId:id}
-
+  console.log(query)
     api.post("/trade/updatefinished",query)
     .then(function(data:any){
       //setTriggerRefresh(!triggerRefresh)
       //HandleUserUpdate(0,profitValues.FinalProfit)
-      console.log("Worked")
+      console.log("Worked lol")
       return true
     })
+}
+
+function CalculateProfit(trade:ITradeTypes,CurrencyData:IForexTypes){
+  let pip=PipFunction(trade.NextOpening,CurrencyData.mid,trade.ExchangeType,trade.Lots)
+  let swap=SwapFunction(pip.PipPrice,trade.ExchangeType,trade.Lots,trade.SwapTax,0);
+  console.log(trade.SwapTax)
+  let finalProfit=FinalProfitFunction(pip.Profit,swap)
+  let ProfitObject:Profit={FinalProfit:finalProfit,PipQtd:pip.PipQtd,PipPrice:pip.PipPrice};
+  return ProfitObject;
+}
+
+async function SearchforTheLastTrade(id:string){
+  let TableData:any=await api.post("/trade/getall",{userId:id});
+  if(TableData){
+    TableData=TableData.data;
+    if(TableData[TableData.length-1].Finished===false){
+      return TableData[TableData.length-1]
+    }
+    else{
+      return{
+        ExchangeType: false,
+         Finished: false,
+         Lots: 0,
+         NextOpening: 0,
+         StartDate: '',
+         SwapTax: 0,
+         __v: 0,
+         _id: ''
+     }
+    }
+  }
 }
 
 export default function Exchange(props:any){
@@ -68,7 +105,7 @@ export default function Exchange(props:any){
         mid:0
     })
     const [LotsInput,SetLotsInput]=useState("0");
-    const [Id,SetId]=useState("")
+    const [Id,SetId]=useState("");
 
   useEffect(()=>{
     if (typeof window !== "undefined") {
@@ -80,9 +117,8 @@ export default function Exchange(props:any){
     return () => {
       websocket.disconnect();
     }
-  },[websocket])    
-  
-  
+  },[websocket])   
+    
 
     return(
         <>
@@ -128,7 +164,7 @@ export default function Exchange(props:any){
 
               <button onClick={()=>SetLotsInput(HandleBuyOrSell(true,LotsInput,CurrencyData,Id))} data-testid="BuyButton" className={styles.BuyButton}>Buy</button>
               <div>
-                <button onClick={()=>console.log(true)} className={styles.ExchangeButton}>Exchange</button>
+                <button onClick={async()=>await HandleExchange(Id,CurrencyData)} className={styles.ExchangeButton}>Exchange</button>
               </div>
           </div>
         </div></>
