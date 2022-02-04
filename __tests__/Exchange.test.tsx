@@ -1,7 +1,6 @@
 import {render,screen,fireEvent} from '@testing-library/react';
 import Exchange from '../pages/components/Exchange';
 import WebsocketConnect from '../pages/api/WebsocketConnection';
-import {prettyDOM} from "@testing-library/dom"
 import '@testing-library/jest-dom'
 
 describe("Testing Exchange",()=>{
