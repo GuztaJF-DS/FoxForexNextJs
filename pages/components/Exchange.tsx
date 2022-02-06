@@ -31,48 +31,42 @@ type Profit={
 };
 
 
-function HandleBuyOrSell(type:boolean,LotsInput:string,CurrencyData:IForexTypes,id:string){
+export function HandleBuyOrSell(type:boolean,LotsInput:string,CurrencyData:IForexTypes,id:string){
   let now = new Date().toISOString()
   let LotsNumber=parseFloat(LotsInput)
   if(CurrencyData.mid!==0 && LotsInput.length!==0 && LotsNumber>0){
     let query={Lots:LotsInput,ExchangeType:type,StartDate:now,SwapTax:0.5,NextOpening:CurrencyData.mid,userId:id}
-    console.log(query)
     api.post("/trade/createunfinished",query)
     .then(function(data:any){
-      console.log(data)
       return "0";
     })
   }
   return "0";
 }
 
-async function HandleExchange(id:string,CurrencyData:IForexTypes){
+export async function HandleExchange(id:string,CurrencyData:IForexTypes){
   let now = new Date().toISOString()
   let TradeData=await SearchforTheLastTrade(id)
-  console.log(TradeData)
   let profitValues=CalculateProfit(TradeData,CurrencyData)
 
   let query={Profit:profitValues.FinalProfit,FinalDate:now,PipQtd:profitValues.PipQtd,PipPrice:profitValues.PipPrice,userId:id}
-  console.log(query)
-    api.post("/trade/updatefinished",query)
-    .then(function(data:any){
+  let result=await api.post("/trade/updatefinished",query)
+  if(result){
       //setTriggerRefresh(!triggerRefresh)
       //HandleUserUpdate(0,profitValues.FinalProfit)
-      console.log("Worked lol")
-      return true
-    })
+      return result.data
+  }
 }
 
-function CalculateProfit(trade:ITradeTypes,CurrencyData:IForexTypes){
+export function CalculateProfit(trade:ITradeTypes,CurrencyData:IForexTypes){
   let pip=PipFunction(trade.NextOpening,CurrencyData.mid,trade.ExchangeType,trade.Lots)
   let swap=SwapFunction(pip.PipPrice,trade.ExchangeType,trade.Lots,trade.SwapTax,0);
-  console.log(trade.SwapTax)
   let finalProfit=FinalProfitFunction(pip.Profit,swap)
   let ProfitObject:Profit={FinalProfit:finalProfit,PipQtd:pip.PipQtd,PipPrice:pip.PipPrice};
   return ProfitObject;
 }
 
-async function SearchforTheLastTrade(id:string){
+export async function SearchforTheLastTrade(id:string){
   let TableData:any=await api.post("/trade/getall",{userId:id});
   if(TableData){
     TableData=TableData.data;
