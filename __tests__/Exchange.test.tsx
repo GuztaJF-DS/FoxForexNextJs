@@ -61,7 +61,7 @@ describe("Testing Exchange",()=>{
             userName: "TestUsername2",
             password: "TestPassword2"
         });
-        let FinalExchange=await HandleExchange(LoginData.data.id,CurrencyData,'Test','Test');
+        let FinalExchange=await HandleExchange(LoginData.data.id,CurrencyData,'Test','Test','Test');
         expect(FinalExchange).toStrictEqual({"message": "Trade Sucessfully Finished"})
     })
  

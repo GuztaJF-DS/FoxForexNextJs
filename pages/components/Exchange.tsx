@@ -31,6 +31,7 @@ type Profit={
   PipPrice: number;
 };
 
+
 export function HandleBuyOrSell(type:boolean,LotsInput:string,CurrencyData:IForexTypes,id:string,setTriggerRefresh:any,triggerRefresh:any){
   let now = new Date().toISOString()
   let LotsNumber=parseFloat(LotsInput)
@@ -46,7 +47,7 @@ export function HandleBuyOrSell(type:boolean,LotsInput:string,CurrencyData:IFore
   return "0";
 }
 
-export async function HandleExchange(id:string,CurrencyData:IForexTypes,setTriggerRefresh:any,triggerRefresh:any){
+export async function HandleExchange(id:string,CurrencyData:IForexTypes,setTriggerRefresh:any,triggerRefresh:any,setExpectProfit:any){
   let now = new Date().toISOString()
   let TradeData=await SearchforTheLastTrade(id)
   let profitValues=CalculateProfit(TradeData,CurrencyData)
@@ -54,9 +55,9 @@ export async function HandleExchange(id:string,CurrencyData:IForexTypes,setTrigg
   let query={Profit:profitValues.FinalProfit,FinalDate:now,PipQtd:profitValues.PipQtd,PipPrice:profitValues.PipPrice,userId:id}
   let result=await api.post("/trade/updatefinished",query)
   if(result){
-      //HandleUserUpdate(0,profitValues.FinalProfit)
       if(setTriggerRefresh!=="Test"){
         setTriggerRefresh(!triggerRefresh)
+        setExpectProfit(0)
       }
       return result.data
   }
@@ -80,31 +81,42 @@ export async function SearchforTheLastTrade(id:string){
     else{
       return{
         ExchangeType: false,
-         Finished: false,
-         Lots: 0,
-         NextOpening: 0,
-         StartDate: '',
-         SwapTax: 0,
-         __v: 0,
-         _id: ''
+        Finished: false,
+        Lots: 0,
+        NextOpening: 0,
+        StartDate: '',
+        SwapTax: 0,
+        __v: 0,
+        _id: ''
      }
     }
   }
 }
 
 export default function Exchange(props:any){
-    const websocket=props.socket;
+  const websocket=props.socket;
   
-    const {triggerRefresh,setTriggerRefresh}=useTriggerRefreshContext()
-    const [CurrencyData,setCurrencyData]=useState<IForexTypes>({
-        symbol: "",
-        ts:"",
-        bid: 0,
-        ask:0,
-        mid:0
-    })
-    const [LotsInput,SetLotsInput]=useState("0");
-    const [Id,SetId]=useState("");
+  const {triggerRefresh,setTriggerRefresh}=useTriggerRefreshContext()
+  const [CurrencyData,setCurrencyData]=useState<IForexTypes>({
+      symbol: "",
+      ts:"",
+      bid: 0,
+      ask:0,
+      mid:0
+  })
+  const [LotsInput,SetLotsInput]=useState("0");
+  const [Id,SetId]=useState("");
+  const [ExpectedProfit,setExpectProfit]=useState(0);
+  const [TradeInfo,setTradeInfo]=useState<ITradeTypes>({
+    ExchangeType: false,
+    Finished: false,
+    Lots: 0,
+    NextOpening: 0,
+    StartDate: '',
+    SwapTax: 0,
+    __v: 0,
+    _id: ''
+ });
 
   useEffect(()=>{
     if (typeof window !== "undefined") {
@@ -118,6 +130,25 @@ export default function Exchange(props:any){
     }
   },[websocket]);
 
+  useEffect(()=>{
+    async function fetchData(){
+      if(Id!==""){
+        let trade=await SearchforTheLastTrade(Id);
+        setTradeInfo(trade)
+        console.log(trade)
+      }
+    }
+    fetchData()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[triggerRefresh]);
+
+  useEffect(()=>{
+    if(TradeInfo.NextOpening!==0){
+      let profit=CalculateProfit(TradeInfo,CurrencyData)
+      setExpectProfit(profit.FinalProfit)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[CurrencyData])
   
     return(
         <>
@@ -136,7 +167,7 @@ export default function Exchange(props:any){
             <div className={styles.profitColor}>
             Expected Profit:
             <div>
-               0
+               {ExpectedProfit}
             </div>
             </div>
 
@@ -147,7 +178,7 @@ export default function Exchange(props:any){
             </div>
             Last Trade Closure:
             <div >
-                0
+                {TradeInfo.NextOpening}
             </div>
             </div>
         </div>
@@ -163,7 +194,7 @@ export default function Exchange(props:any){
 
               <button disabled={triggerRefresh} onClick={()=>SetLotsInput(HandleBuyOrSell(true,LotsInput,CurrencyData,Id,setTriggerRefresh,triggerRefresh))} data-testid="BuyButton" className={styles.BuyButton}>Buy</button>
               <div>
-                <button disabled={!triggerRefresh} onClick={async()=>await HandleExchange(Id,CurrencyData,setTriggerRefresh,triggerRefresh)} className={styles.ExchangeButton}>Exchange</button>
+                <button disabled={!triggerRefresh} onClick={async()=>await HandleExchange(Id,CurrencyData,setTriggerRefresh,triggerRefresh,setExpectProfit)} className={styles.ExchangeButton}>Exchange</button>
               </div>
           </div>
         </div></>
