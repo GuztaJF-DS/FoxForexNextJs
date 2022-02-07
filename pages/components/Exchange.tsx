@@ -1,10 +1,10 @@
-import styles from '../../styles/Main.module.css'
+import styles from '../../styles/Main.module.css';
 import { useState,useEffect } from 'react';
-import api from '../api/AxiosConnection'
-import PipFunction from '../functions/pipFunction'
-import SwapFunction from '../functions/swapFunctions'
-import FinalProfitFunction from '../functions/finalProfitFunction'
-import { useTriggerRefreshContext } from '../context/triggerRefreshContext'
+import api from '../api/AxiosConnection';
+import PipFunction from '../functions/pipFunction';
+import SwapFunction from '../functions/swapFunctions';
+import FinalProfitFunction from '../functions/finalProfitFunction';
+import { useTriggerRefreshContext } from '../context/triggerRefreshContext';
 
 interface IForexTypes{
     symbol:string;
@@ -73,7 +73,8 @@ export function CalculateProfit(trade:ITradeTypes,CurrencyData:IForexTypes){
 
 export async function SearchforTheLastTrade(id:string){
   let TableData:any=await api.post("/trade/getall",{userId:id});
-  if(TableData){
+  console.log(TableData.data.length)
+  if(TableData.data.length!==0){
     TableData=TableData.data;
     if(TableData[TableData.length-1].Finished===false){
       return TableData[TableData.length-1]
@@ -91,6 +92,18 @@ export async function SearchforTheLastTrade(id:string){
      }
     }
   }
+    else{
+      return{
+        ExchangeType: false,
+        Finished: false,
+        Lots: 0,
+        NextOpening: 0,
+        StartDate: '',
+        SwapTax: 0,
+        __v: 0,
+        _id: ''
+     }
+    }
 }
 
 export default function Exchange(props:any){
@@ -135,7 +148,6 @@ export default function Exchange(props:any){
       if(Id!==""){
         let trade=await SearchforTheLastTrade(Id);
         setTradeInfo(trade)
-        console.log(trade)
       }
     }
     fetchData()
@@ -148,7 +160,8 @@ export default function Exchange(props:any){
       setExpectProfit(profit.FinalProfit)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[CurrencyData])
+  },[CurrencyData]);
+
   
     return(
         <>

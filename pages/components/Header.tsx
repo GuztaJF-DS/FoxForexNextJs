@@ -1,8 +1,9 @@
 import styles from '../../styles/Main.module.css';
 import ModalStyle from '../../styles/Modal.module.css';
 import Modal from 'react-modal';
-import {useState,useEffect} from 'react'
+import {useState,useEffect} from 'react';
 import api from '../api/AxiosConnection';
+import { useTriggerRefreshContext } from '../context/triggerRefreshContext';
 
 export async function Register(UserInput:string,PasswordInput:string){
   try {
@@ -15,14 +16,14 @@ export async function Register(UserInput:string,PasswordInput:string){
       }
       let result=await api.post("/user/new",query);
         if(result.data.message!==undefined){
-          return "Now you Can Login"
+          return "Now you Can Login";
         }
         else{
-          return (result.data.error)
+          return (result.data.error);
         }
     }  
   } catch (err) {
-    console.log(err)
+    console.log(err);
   }
 }
 
@@ -53,8 +54,10 @@ export default function Header(){
   const [modalIsOpen, setIsOpen] = useState(false);
   const [UserInput,setUserInput]=useState("");
   const [PasswordInput,setPasswordInput]=useState("");
-  const [Message,setMessage]=useState("Now");
+  const [Message,setMessage]=useState("");
   const [id,setId]=useState("0")
+  const {triggerRefresh,setTriggerRefresh}=useTriggerRefreshContext()
+  const [CurrentsData,setCurrentsData]=useState({lots:0,profit:0})
 
   useEffect(()=>{
     if (typeof window !== "undefined") {
@@ -63,6 +66,29 @@ export default function Header(){
       }
     }
   },[Message])
+
+  useEffect(()=>{
+    async function fetchData(){
+      let TableData:any=await api.post("/trade/getall",{userId:id});
+      let sum=0;
+      let lots=0;
+      for(var x=0;x<TableData.data.length;x++){
+        sum+=TableData.data[x].Profit;
+        if(x==TableData.data.length-1){
+          if(TableData.data[x].Finished===false){
+            lots=TableData.data[x].Lots
+          }
+        }
+      }
+      let ProfitCutted=(String(sum).split('.'))
+      if(ProfitCutted[1]!==undefined){
+          let profitResumed=(ProfitCutted[0]+"."+ProfitCutted[1].substring(0,ProfitCutted[1].length-10))
+          sum=parseFloat(profitResumed)
+      }
+      setCurrentsData({lots:lots,profit:sum})
+    }
+    fetchData()
+  },[triggerRefresh,id])
 
   function openModal() {
     setIsOpen(true);
@@ -75,8 +101,6 @@ export default function Header(){
     setIsOpen(false);
   }
 
-  
-
   const customStyles = {
       top: '50%',
       left: '50%',
@@ -87,8 +111,6 @@ export default function Header(){
       backgroundColor: '#E1E1E1',
   };
 
-
-
     return(
         <div className={styles.header}>
         <div className={styles.foxforextext}>
@@ -96,9 +118,11 @@ export default function Header(){
         </div>
           <div id='BottomHeader' className={styles.CurrentUserData}>
             <div>
-              Current Profit:0$
+              Current Profit:{CurrentsData.profit}$
             </div>
+            <div>
             {(id==="0")?null:"Logged in"}
+            </div>
             <Modal
               isOpen={modalIsOpen}
               onRequestClose={closeModal}
@@ -126,7 +150,7 @@ export default function Header(){
 
             </Modal>
             <div>
-              Current lots: 0
+              Current lots: {CurrentsData.lots}
             </div>
           </div>
            <button onClick={openModal} className={ModalStyle.UserAccount} data-testid="openModal">User Account</button>
