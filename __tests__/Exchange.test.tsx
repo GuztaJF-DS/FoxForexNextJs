@@ -2,7 +2,9 @@ import {HandleBuyOrSell,HandleExchange,CalculateProfit,SearchforTheLastTrade} fr
 import '@testing-library/jest-dom'
 import api from '../pages/api/AxiosConnection';
 
+
 describe("Testing Exchange",()=>{
+    
     beforeAll((done)=>{
         api.post("/user/new",{
             currentProfit:0,
@@ -38,7 +40,7 @@ describe("Testing Exchange",()=>{
             userName: "TestUsername2",
             password: "TestPassword2"
         });
-        let result=HandleBuyOrSell(true,'1',CurrencyData,LoginData.data.id);
+        let result=HandleBuyOrSell(true,'1',CurrencyData,LoginData.data.id,'Test','Test');
         expect(result).toBe("0");
     })
     it("Test the Profit",async()=>{
@@ -59,7 +61,7 @@ describe("Testing Exchange",()=>{
             userName: "TestUsername2",
             password: "TestPassword2"
         });
-        let FinalExchange=await HandleExchange(LoginData.data.id,CurrencyData);
+        let FinalExchange=await HandleExchange(LoginData.data.id,CurrencyData,'Test','Test');
         expect(FinalExchange).toStrictEqual({"message": "Trade Sucessfully Finished"})
     })
  

@@ -4,6 +4,7 @@ import api from '../api/AxiosConnection'
 import PipFunction from '../functions/pipFunction'
 import SwapFunction from '../functions/swapFunctions'
 import FinalProfitFunction from '../functions/finalProfitFunction'
+import { useTriggerRefreshContext } from '../context/triggerRefreshContext'
 
 interface IForexTypes{
     symbol:string;
@@ -30,21 +31,22 @@ type Profit={
   PipPrice: number;
 };
 
-
-export function HandleBuyOrSell(type:boolean,LotsInput:string,CurrencyData:IForexTypes,id:string){
+export function HandleBuyOrSell(type:boolean,LotsInput:string,CurrencyData:IForexTypes,id:string,setTriggerRefresh:any,triggerRefresh:any){
   let now = new Date().toISOString()
   let LotsNumber=parseFloat(LotsInput)
   if(CurrencyData.mid!==0 && LotsInput.length!==0 && LotsNumber>0){
     let query={Lots:LotsInput,ExchangeType:type,StartDate:now,SwapTax:0.5,NextOpening:CurrencyData.mid,userId:id}
     api.post("/trade/createunfinished",query)
     .then(function(data:any){
-      return "0";
+      if(setTriggerRefresh!=="Test"){
+        setTriggerRefresh(!triggerRefresh)
+      }
     })
   }
   return "0";
 }
 
-export async function HandleExchange(id:string,CurrencyData:IForexTypes){
+export async function HandleExchange(id:string,CurrencyData:IForexTypes,setTriggerRefresh:any,triggerRefresh:any){
   let now = new Date().toISOString()
   let TradeData=await SearchforTheLastTrade(id)
   let profitValues=CalculateProfit(TradeData,CurrencyData)
@@ -52,8 +54,10 @@ export async function HandleExchange(id:string,CurrencyData:IForexTypes){
   let query={Profit:profitValues.FinalProfit,FinalDate:now,PipQtd:profitValues.PipQtd,PipPrice:profitValues.PipPrice,userId:id}
   let result=await api.post("/trade/updatefinished",query)
   if(result){
-      //setTriggerRefresh(!triggerRefresh)
       //HandleUserUpdate(0,profitValues.FinalProfit)
+      if(setTriggerRefresh!=="Test"){
+        setTriggerRefresh(!triggerRefresh)
+      }
       return result.data
   }
 }
@@ -90,7 +94,8 @@ export async function SearchforTheLastTrade(id:string){
 
 export default function Exchange(props:any){
     const websocket=props.socket;
-    
+  
+    const {triggerRefresh,setTriggerRefresh}=useTriggerRefreshContext()
     const [CurrencyData,setCurrencyData]=useState<IForexTypes>({
         symbol: "",
         ts:"",
@@ -111,9 +116,9 @@ export default function Exchange(props:any){
     return () => {
       websocket.disconnect();
     }
-  },[websocket])   
-    
+  },[websocket]);
 
+  
     return(
         <>
         <div className={styles.BidAndOffer}>
@@ -150,15 +155,15 @@ export default function Exchange(props:any){
         <div className={styles.Exchange}>
         <p>Lots</p>
           <div className={styles.Buttons}>
-              <button onClick={()=>SetLotsInput(HandleBuyOrSell(false,LotsInput,CurrencyData,Id))} data-testid="SellButton" className={styles.SellButton}>Sell</button>
+              <button disabled={triggerRefresh} onClick={()=>SetLotsInput(HandleBuyOrSell(false,LotsInput,CurrencyData,Id,setTriggerRefresh,triggerRefresh))} data-testid="SellButton" className={styles.SellButton}>Sell</button>
               
-              <input className={styles.Lots} value={LotsInput}
+              <input disabled={triggerRefresh} className={styles.Lots} value={LotsInput}
                 onChange={(e)=>SetLotsInput(e.target.value)}
                 type="number" data-testid="lotsInput"/>
 
-              <button onClick={()=>SetLotsInput(HandleBuyOrSell(true,LotsInput,CurrencyData,Id))} data-testid="BuyButton" className={styles.BuyButton}>Buy</button>
+              <button disabled={triggerRefresh} onClick={()=>SetLotsInput(HandleBuyOrSell(true,LotsInput,CurrencyData,Id,setTriggerRefresh,triggerRefresh))} data-testid="BuyButton" className={styles.BuyButton}>Buy</button>
               <div>
-                <button onClick={async()=>await HandleExchange(Id,CurrencyData)} className={styles.ExchangeButton}>Exchange</button>
+                <button disabled={!triggerRefresh} onClick={async()=>await HandleExchange(Id,CurrencyData,setTriggerRefresh,triggerRefresh)} className={styles.ExchangeButton}>Exchange</button>
               </div>
           </div>
         </div></>
