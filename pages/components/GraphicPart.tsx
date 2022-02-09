@@ -1,63 +1,44 @@
-import React,{useState,useEffect} from 'react';
-import api from '../api/AxiosConnection'
-import { VictoryChart,VictoryLine,VictoryVoronoiContainer,VictoryAxis } from 'victory';
-import styles from '../../styles/Main.module.css'
-
-export function getHourEarly(now:Date){
-
-  let SplitTime=now.toISOString().split('T');
-  let Time=SplitTime[1].split(':');
-
-  let FullHourEarly = SplitTime[0]+"-"+(now.getHours()+2)+":"+Time[1];
-  return(FullHourEarly)
-}
-
-export function getToday(now:Date){
-  let SplitTime=now.toISOString().split('T');
-  let Time=SplitTime[1].split('.');
-
-  let FullToday=SplitTime[0]+"-"+Time[0]
-  return FullToday
-}
+import React,{useState,useEffect} from "react";
+import api from "api/AxiosConnection";
+import { VictoryChart,VictoryLine,VictoryVoronoiContainer,VictoryAxis } from "victory";
+import styles from "../../styles/Main.module.css";
+import { getHourEarly } from "functions/graphicFunctions/getHourEarly";
+import { getToday } from "functions/graphicFunctions/getToday";
 
 export function GraphicPart(){
   const [graphicInfo,setGraphicInfo]=useState([{x:0,y:0}]);
-  const [reload,setReload]=useState<boolean>(false)
+  const [reload,setReload]=useState<boolean>(false);
 
   useEffect(()=>{
-    let now = new Date();
-    let aHourEarly=getHourEarly(now)
-    let today=getToday(now)
+    const now = new Date();
+    const aHourEarly=getHourEarly(now);
+    const today=getToday(now);
     
-    let query={
+    const query={
       StartDate:aHourEarly,
       EndDate:today
-    }
+    };
 
     api.post("/forex/getminutehistory",query)
     .then(function(data:any){
-      let FirstData=data.data.quotes[0]
-      let FirstSplitedDate=(FirstData.date.split(" "))
-      let FirstRealDate= FirstSplitedDate[1].substring(0,5);
-      let all=[{x:FirstRealDate,y:FirstData.close}];
+      const FirstData=data.data.quotes[0];
+      const FirstSplitedDate=(FirstData.date.split(" "));
+      const FirstRealDate= FirstSplitedDate[1].substring(0,5);
+      const all=[{x:FirstRealDate,y:FirstData.close}];
       data.data.quotes.map(function(Data:any,index:number){
         if(index!=0){
-          let realdate=((Data.date.split(" ")));
-          let FirstRealDate= realdate[1].substring(0,5);
-          all.push({x:FirstRealDate,y:Data.close})
+          const realdate=((Data.date.split(" ")));
+          const FirstRealDate= realdate[1].substring(0,5);
+          all.push({x:FirstRealDate,y:Data.close});
         }
-      })
-      setGraphicInfo(all)
-    })
-  },[reload])
+      });
+      setGraphicInfo(all);
+    });
+  },[reload]);
 
-  let a=0
-  
-  /* remove the comentary for update the graphic automatically
-  
   setTimeout(function(){
-    setReload(!reload)
-  },1000*60)*/
+    setReload(!reload);
+  },1000*60);
 
     return(
         <div className={styles.GraphicPart}>
@@ -99,7 +80,7 @@ export function GraphicPart(){
             </VictoryChart>
           </div>
         </div>
-    )
+    );
 }
 
-export default GraphicPart
+export default GraphicPart;

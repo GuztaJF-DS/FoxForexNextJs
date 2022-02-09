@@ -1,8 +1,9 @@
 import {render,screen,fireEvent} from '@testing-library/react';
-import Header from '../pages/components/Header';
+import Header from 'components/Header';
 import '@testing-library/jest-dom';
-import api from '../pages/api/AxiosConnection'
-import {Register,Login} from '../pages/components/Header'
+import api from 'api/AxiosConnection';
+import {Register} from 'functions/HeaderFunction/RegisterAccount'
+import {Login} from 'functions/HeaderFunction/LoginAccount'
 
 describe("Testing Exchange",()=>{
 
@@ -32,23 +33,23 @@ describe("Testing Exchange",()=>{
     })
 
     it('Register a New Account',async()=>{
-        let RegisterResult=await Register("TestUsername","TestPassword");
+        let RegisterResult=await Register("TestUsername","TestPassword","Test");
         expect(RegisterResult).toBe("Now you Can Login");
     });
     it('Failed to register the same account',async()=>{
-        let RegisterResult=await Register("TestUsername","TestPassword");
+        let RegisterResult=await Register("TestUsername","TestPassword","Test");
         expect(RegisterResult).toBe("UserName already Exists");
     })
     it('Login the Account',async()=>{
-        let LoginResult=await Login("TestUsername","TestPassword");
+        let LoginResult=await Login("TestUsername","TestPassword","Test");
         expect(LoginResult).toBe("Login Successfully");
     });
     it('Failed to Find any user that corresponds to the given data',async()=>{
-        let LoginResult=await Login("Wrong","TestPassword");
+        let LoginResult=await Login("Wrong","TestPassword","Test");
         expect(LoginResult).toBe("User Not Found");
     });
     it('Failed to login to the Account with the wrong password',async()=>{
-        let LoginResult=await Login("TestUsername","WrongPassword");
+        let LoginResult=await Login("TestUsername","WrongPassword","Test");
         expect(LoginResult).toBe("Wrong Password");
     });
 })

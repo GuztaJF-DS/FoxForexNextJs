@@ -1,6 +1,9 @@
-import {HandleBuyOrSell,HandleExchange,CalculateProfit,SearchforTheLastTrade} from '../pages/components/Exchange';
+import { HandleExchange } from 'functions/exchangeFunctions/HandleExchange';
+import { CalculateProfit } from 'functions/exchangeFunctions/CalculateProfit';
+import { SearchforTheLastTrade } from 'functions/exchangeFunctions/SearchforTheLastTrade';
+import { HandleBuyOrSell } from 'functions/exchangeFunctions/HandleBuyOrSell';
 import '@testing-library/jest-dom'
-import api from '../pages/api/AxiosConnection';
+import api from 'api/AxiosConnection';
 
 
 describe("Testing Exchange",()=>{
