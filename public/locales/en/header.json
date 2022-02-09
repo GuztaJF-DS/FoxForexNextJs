@@ -1,0 +1,12 @@
+{
+    "Profit":"Current Profit",
+    "Lots":"Current lots",
+    "Login-Register":"Login/Register",
+    "LoginMessage":"Login Successfully",
+    "RegisterMessage":"Now you Can Login",
+    "UserPlaceholder":"Username",
+    "PasswordPlaceholder":"Password",
+    "LoginButton":"Login",
+    "RegisterButton":"Register",
+    "LoggedIn":"logged In"
+}

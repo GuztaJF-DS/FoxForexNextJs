@@ -5,6 +5,7 @@ import PipFunction from '../functions/pipFunction';
 import SwapFunction from '../functions/swapFunctions';
 import FinalProfitFunction from '../functions/finalProfitFunction';
 import { useTriggerRefreshContext } from '../context/triggerRefreshContext';
+import { useTranslation } from 'next-i18next';
 
 interface IForexTypes{
     symbol:string;
@@ -131,6 +132,8 @@ export default function Exchange(props:any){
     _id: ''
  });
 
+ const { t } = useTranslation('exchange');
+
   useEffect(()=>{
     if (typeof window !== "undefined") {
       SetId(localStorage.getItem("UserId")!);
@@ -171,14 +174,14 @@ export default function Exchange(props:any){
             <div>
                 {CurrencyData.bid}
             </div>
-            Opening:
+            {t("Opening")}:
             <div>
                 {CurrencyData.mid}
             </div>
             </div>
 
             <div className={styles.profitColor}>
-            Expected Profit:
+            {t("Expected-Profit")}:
             <div>
                {ExpectedProfit}
             </div>
@@ -189,7 +192,7 @@ export default function Exchange(props:any){
             <div>
                 {CurrencyData.ask}
             </div>
-            Last Trade Closure:
+            {t("Last-Trade-Closure")}:
             <div >
                 {TradeInfo.NextOpening}
             </div>
@@ -197,17 +200,17 @@ export default function Exchange(props:any){
         </div>
 
         <div className={styles.Exchange}>
-        <p>Lots</p>
+        <p>{t("Lots")}</p>
           <div className={styles.Buttons}>
-              <button disabled={triggerRefresh} onClick={()=>SetLotsInput(HandleBuyOrSell(false,LotsInput,CurrencyData,Id,setTriggerRefresh,triggerRefresh))} data-testid="SellButton" className={styles.SellButton}>Sell</button>
+              <button disabled={triggerRefresh} onClick={()=>SetLotsInput(HandleBuyOrSell(false,LotsInput,CurrencyData,Id,setTriggerRefresh,triggerRefresh))} data-testid="SellButton" className={styles.SellButton}>{t('SellButton')}</button>
               
               <input disabled={triggerRefresh} className={styles.Lots} value={LotsInput}
                 onChange={(e)=>SetLotsInput(e.target.value)}
                 type="number" data-testid="lotsInput"/>
 
-              <button disabled={triggerRefresh} onClick={()=>SetLotsInput(HandleBuyOrSell(true,LotsInput,CurrencyData,Id,setTriggerRefresh,triggerRefresh))} data-testid="BuyButton" className={styles.BuyButton}>Buy</button>
+              <button disabled={triggerRefresh} onClick={()=>SetLotsInput(HandleBuyOrSell(true,LotsInput,CurrencyData,Id,setTriggerRefresh,triggerRefresh))} data-testid="BuyButton" className={styles.BuyButton}>{t('BuyButton')}</button>
               <div>
-                <button disabled={!triggerRefresh} onClick={async()=>await HandleExchange(Id,CurrencyData,setTriggerRefresh,triggerRefresh,setExpectProfit)} className={styles.ExchangeButton}>Exchange</button>
+                <button disabled={!triggerRefresh} onClick={async()=>await HandleExchange(Id,CurrencyData,setTriggerRefresh,triggerRefresh,setExpectProfit)} className={styles.ExchangeButton}>{t('ExchangeButton')}</button>
               </div>
           </div>
         </div></>

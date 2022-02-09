@@ -4,8 +4,9 @@ import Modal from 'react-modal';
 import {useState,useEffect} from 'react';
 import api from '../api/AxiosConnection';
 import { useTriggerRefreshContext } from '../context/triggerRefreshContext';
+import { useTranslation } from 'next-i18next';
 
-export async function Register(UserInput:string,PasswordInput:string){
+export async function Register(UserInput:string,PasswordInput:string,RegisterMessage:string){
   try {
     if(UserInput.length!==0&&PasswordInput.length!==0){
       const query={
@@ -16,7 +17,7 @@ export async function Register(UserInput:string,PasswordInput:string){
       }
       let result=await api.post("/user/new",query);
         if(result.data.message!==undefined){
-          return "Now you Can Login";
+          return RegisterMessage;
         }
         else{
           return (result.data.error);
@@ -27,7 +28,7 @@ export async function Register(UserInput:string,PasswordInput:string){
   }
 }
 
-export async function Login(UserInput:string,PasswordInput:string){
+export async function Login(UserInput:string,PasswordInput:string,LoginMessage:string){
   try {
     if(UserInput.length!==0&&PasswordInput.length!==0){
       const query={
@@ -36,9 +37,9 @@ export async function Login(UserInput:string,PasswordInput:string){
       }
       let result=await api.post("/user/login",query);
         if(result.data.message!==undefined){
-          if (typeof window !== "undefined") {
+          if (typeof window !== undefined) {
           localStorage.setItem("UserId",result.data.id);
-          return "Login Successfully"
+          return LoginMessage
         }
         }
         else{
@@ -58,6 +59,8 @@ export default function Header(){
   const [id,setId]=useState("0")
   const {triggerRefresh,setTriggerRefresh}=useTriggerRefreshContext()
   const [CurrentsData,setCurrentsData]=useState({lots:0,profit:0})
+
+  const { t } = useTranslation('header');
 
   useEffect(()=>{
     if (typeof window !== "undefined") {
@@ -116,44 +119,44 @@ export default function Header(){
         <div className={styles.foxforextext}>
           Fox Forex
         </div>
-          <div id='BottomHeader' className={styles.CurrentUserData}>
+          <div id="BottomHeader" className={styles.CurrentUserData}>
             <div>
-              Current Profit:{CurrentsData.profit}$
+              {t("Profit")}:{CurrentsData.profit}$
             </div>
             <div>
-            {(id==="0")?null:"Logged in"}
+            {(id==="0")?null:t('LoggedIn')}
             </div>
             <Modal
               isOpen={modalIsOpen}
               onRequestClose={closeModal}
-              contentLabel="Example Modal"
+              contentLabel="Login Modal"
               ariaHideApp={false}
               style={{content:customStyles}}
             >
-              <h2>Login/Register</h2>
+              <h2>{t("Login-Register")}</h2>
               <div
                 className={ModalStyle.modalBackground}
               >
               <input className={ModalStyle.UserInput} value={UserInput}
                 onChange={(e)=>setUserInput(e.target.value)}
-                type="text" placeholder="Username" data-testid="Username"/>
+                type="text" placeholder={t('UserPlaceholder')} data-testid="Username"/>
               
               <input className={ModalStyle.UserInput} value={PasswordInput}
                 onChange={(e)=>setPasswordInput(e.target.value)}
-                type="password" placeholder="Password" data-testid="Password"/>
+                type="password" placeholder={t('PasswordPlaceholder')} data-testid="Password"/>
               </div>
               {Message}
               <div className={ModalStyle.Buttons}>
-              <button onClick={async()=>setMessage(await Login(UserInput,PasswordInput))} data-testid="Login" className={ModalStyle.SignButton}>Login</button>
-              <button onClick={async()=>setMessage(await Register(UserInput,PasswordInput))} data-testid="Register" className={ModalStyle.SignButton}>Register</button>
+              <button onClick={async()=>setMessage(await Login(UserInput,PasswordInput,t('LoginMessage')))} data-testid="Login" className={ModalStyle.SignButton}>{t('LoginButton')}</button>
+              <button onClick={async()=>setMessage(await Register(UserInput,PasswordInput,t('RegisterMessage')))} data-testid="Register" className={ModalStyle.SignButton}>{t('RegisterButton')}</button>
               </div>
 
             </Modal>
             <div>
-              Current lots: {CurrentsData.lots}
+              {t("Lots")}: {CurrentsData.lots}
             </div>
           </div>
-           <button onClick={openModal} className={ModalStyle.UserAccount} data-testid="openModal">User Account</button>
+           <button onClick={openModal} className={ModalStyle.UserAccount} data-testid="openModal">{t('Login-Register')}</button>
       </div>
     )
 }

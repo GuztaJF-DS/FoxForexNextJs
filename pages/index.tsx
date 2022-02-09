@@ -7,6 +7,7 @@ import Exchange from './components/Exchange';
 import PastTrades from './components/PastTrades';
 import WebsocketConnect from './api/WebsocketConnection';
 import { TriggerRefreshContext } from './context/triggerRefreshContext';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 export default function Home() {
   const websocket=WebsocketConnect();
@@ -35,3 +36,9 @@ export default function Home() {
     </div>
   )
 }
+
+export const getServerSideProps = async ({ locale }: { locale: string }) => ({
+  props: {
+    ...await serverSideTranslations(locale, ['common','header','exchange','pastTrades']),
+  },
+})

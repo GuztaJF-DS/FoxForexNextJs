@@ -3,7 +3,7 @@ import api from '../api/AxiosConnection'
 import { VictoryChart,VictoryLine,VictoryVoronoiContainer,VictoryAxis } from 'victory';
 import styles from '../../styles/Main.module.css'
 
-function getHourEarly(now:Date){
+export function getHourEarly(now:Date){
 
   let SplitTime=now.toISOString().split('T');
   let Time=SplitTime[1].split(':');
@@ -12,7 +12,7 @@ function getHourEarly(now:Date){
   return(FullHourEarly)
 }
 
-function getToday(now:Date){
+export function getToday(now:Date){
   let SplitTime=now.toISOString().split('T');
   let Time=SplitTime[1].split('.');
 
@@ -20,7 +20,7 @@ function getToday(now:Date){
   return FullToday
 }
 
-function GraphicPart(){
+export function GraphicPart(){
   const [graphicInfo,setGraphicInfo]=useState([{x:0,y:0}]);
   const [reload,setReload]=useState<boolean>(false)
 
@@ -53,9 +53,11 @@ function GraphicPart(){
 
   let a=0
   
+  /* remove the comentary for update the graphic automatically
+  
   setTimeout(function(){
     setReload(!reload)
-  },1000*60)
+  },1000*60)*/
 
     return(
         <div className={styles.GraphicPart}>
