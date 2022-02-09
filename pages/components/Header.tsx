@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/link-passhref */
 import styles from '../../styles/Main.module.css';
 import ModalStyle from '../../styles/Modal.module.css';
 import Modal from 'react-modal';
@@ -5,6 +6,8 @@ import {useState,useEffect} from 'react';
 import api from '../api/AxiosConnection';
 import { useTriggerRefreshContext } from '../context/triggerRefreshContext';
 import { useTranslation } from 'next-i18next';
+import Link from 'next/link'
+import { useRouter } from 'next/router'
 
 export async function Register(UserInput:string,PasswordInput:string,RegisterMessage:string){
   try {
@@ -61,6 +64,7 @@ export default function Header(){
   const [CurrentsData,setCurrentsData]=useState({lots:0,profit:0})
 
   const { t } = useTranslation('header');
+  const router = useRouter()
 
   useEffect(()=>{
     if (typeof window !== "undefined") {
@@ -124,7 +128,7 @@ export default function Header(){
               {t("Profit")}:{CurrentsData.profit}$
             </div>
             <div>
-            {(id==="0")?null:t('LoggedIn')}
+            {(id==="0")?null:t('Logged-In')}
             </div>
             <Modal
               isOpen={modalIsOpen}
@@ -139,16 +143,16 @@ export default function Header(){
               >
               <input className={ModalStyle.UserInput} value={UserInput}
                 onChange={(e)=>setUserInput(e.target.value)}
-                type="text" placeholder={t('UserPlaceholder')} data-testid="Username"/>
+                type="text" placeholder={t('User-Placeholder')} data-testid="Username"/>
               
               <input className={ModalStyle.UserInput} value={PasswordInput}
                 onChange={(e)=>setPasswordInput(e.target.value)}
-                type="password" placeholder={t('PasswordPlaceholder')} data-testid="Password"/>
+                type="password" placeholder={t('Password-Placeholder')} data-testid="Password"/>
               </div>
               {Message}
               <div className={ModalStyle.Buttons}>
-              <button onClick={async()=>setMessage(await Login(UserInput,PasswordInput,t('LoginMessage')))} data-testid="Login" className={ModalStyle.SignButton}>{t('LoginButton')}</button>
-              <button onClick={async()=>setMessage(await Register(UserInput,PasswordInput,t('RegisterMessage')))} data-testid="Register" className={ModalStyle.SignButton}>{t('RegisterButton')}</button>
+              <button onClick={async()=>setMessage(await Login(UserInput,PasswordInput,t('Login-Message')))} data-testid="Login" className={ModalStyle.SignButton}>{t('Login-Button')}</button>
+              <button onClick={async()=>setMessage(await Register(UserInput,PasswordInput,t('Register-Message')))} data-testid="Register" className={ModalStyle.SignButton}>{t('Register-Button')}</button>
               </div>
 
             </Modal>
@@ -157,6 +161,16 @@ export default function Header(){
             </div>
           </div>
            <button onClick={openModal} className={ModalStyle.UserAccount} data-testid="openModal">{t('Login-Register')}</button>
+           <Link href='/'
+            locale={router.locale === 'en' ? 'pt' : 'en'}
+          >
+            <button
+              type='button'
+              className={ModalStyle.UserAccount} 
+            >
+              {t("Language-Change")}
+            </button>
+          </Link>
       </div>
     )
 }

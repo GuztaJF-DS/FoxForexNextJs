@@ -2,11 +2,12 @@
     "Profit":"Lucro Total",
     "Lots":"Lotes Totais",
     "Login-Register":"Entrar/Cadastrar",
-    "LoginMessage":"Entrou com sucesso",
-    "RegisterMessage":"Agora você pode entrar com essa conta",
-    "UserPlaceholder":"Nome de usuário",
-    "PasswordPlaceholder":"Senha",
-    "LoginButton":"Entrar",
-    "RegisterButton":"Cadastrar",
-    "LoggedIn":"Logado"
+    "Login-Message":"Entrou com sucesso",
+    "Register-Message":"Agora você pode entrar com essa conta",
+    "User-Placeholder":"Nome de usuário",
+    "Password-Placeholder":"Senha",
+    "Login-Button":"Entrar",
+    "Register-Button":"Cadastrar",
+    "Logged-In":"Logado",
+    "Language-Change":"Mudar para Inglês"
 }

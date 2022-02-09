@@ -2,11 +2,12 @@
     "Profit":"Current Profit",
     "Lots":"Current lots",
     "Login-Register":"Login/Register",
-    "LoginMessage":"Login Successfully",
-    "RegisterMessage":"Now you Can Login",
-    "UserPlaceholder":"Username",
-    "PasswordPlaceholder":"Password",
+    "Login-Message":"Login Successfully",
+    "Register-Message":"Now you Can Login",
+    "User-Placeholder":"Username",
+    "Password-Placeholder":"Password",
     "LoginButton":"Login",
     "RegisterButton":"Register",
-    "LoggedIn":"logged In"
+    "Logged-In":"logged In",
+    "Language-Change":"Change to Portuguese"
 }
