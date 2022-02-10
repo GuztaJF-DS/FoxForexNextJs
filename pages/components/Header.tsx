@@ -1,15 +1,15 @@
 /* eslint-disable @next/next/link-passhref */
-import styles from "../../styles/Main.module.css";
-import ModalStyle from "../../styles/Modal.module.css";
+import styles from "styles/Main.module.css";
+import ModalStyle from "styles/Modal.module.css";
 import Modal from "react-modal";
 import {useState,useEffect} from "react";
-import api from "api/AxiosConnection";
-import { useTriggerRefreshContext } from "context/triggerRefreshContext";
+import api from "../../src/api/AxiosConnection";
+import { useTriggerRefreshContext } from "../../src/context/triggerRefreshContext";
 import { useTranslation } from "next-i18next";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { Register } from "functions/HeaderFunction/RegisterAccount";
-import { Login } from "functions/HeaderFunction/LoginAccount";
+import  Register from "../../src/functions/HeaderFunction/RegisterAccount";
+import Login from "../../src/functions/HeaderFunction/LoginAccount";
 
 export default function Header(){
   const [modalIsOpen, setIsOpen] = useState(false);

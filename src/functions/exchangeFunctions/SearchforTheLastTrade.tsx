@@ -1,8 +1,7 @@
-import api from "api/AxiosConnection";
+import api from "../../api/AxiosConnection";
 
-export async function SearchforTheLastTrade(id:string){
+export default async function SearchforTheLastTrade(id:string){
     let TableData:any=await api.post("/trade/getall",{userId:id});
-    console.log(TableData.data.length);
     if(TableData.data.length!==0){
       TableData=TableData.data;
       if(TableData[TableData.length-1].Finished===false){

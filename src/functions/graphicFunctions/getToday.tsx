@@ -1,4 +1,4 @@
-export function getToday(now:Date){
+export default function getToday(now:Date){
     const SplitTime=now.toISOString().split("T");
     const Time=SplitTime[1].split(".");
   

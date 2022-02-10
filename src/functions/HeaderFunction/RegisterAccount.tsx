@@ -1,6 +1,6 @@
-import api from "api/AxiosConnection";
+import api from "../../api/AxiosConnection";
 
-export async function Register(UserInput:string,PasswordInput:string,RegisterMessage:string){
+export default async function Register(UserInput:string,PasswordInput:string,RegisterMessage:string){
     try {
       if(UserInput.length!==0&&PasswordInput.length!==0){
         const query={

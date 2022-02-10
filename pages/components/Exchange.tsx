@@ -1,11 +1,11 @@
-import styles from "../../styles/Main.module.css";
+import styles from "styles/Main.module.css";
 import { useState,useEffect } from "react";
-import { HandleBuyOrSell } from "functions/exchangeFunctions/HandleBuyOrSell";
-import { HandleExchange } from "functions/exchangeFunctions/HandleExchange";
-import { CalculateProfit } from "functions/exchangeFunctions/CalculateProfit";
-import { SearchforTheLastTrade } from "functions/exchangeFunctions/SearchforTheLastTrade";
-import { IForexTypes,ITradeTypes } from "interfaces/IExchange";
-import { useTriggerRefreshContext } from "context/triggerRefreshContext";
+import HandleBuyOrSell from "../../src/functions/exchangeFunctions/HandleBuyOrSell";
+import HandleExchange from "../../src/functions/exchangeFunctions/HandleExchange";
+import CalculateProfit from "../../src/functions/exchangeFunctions/CalculateProfit";
+import SearchforTheLastTrade from "../../src/functions/exchangeFunctions/SearchforTheLastTrade";
+import { IForexTypes,ITradeTypes } from "../../src/interfaces/IExchange";
+import { useTriggerRefreshContext } from "../../src/context/triggerRefreshContext";
 import { useTranslation } from "next-i18next";
 
 export default function Exchange(props:any){

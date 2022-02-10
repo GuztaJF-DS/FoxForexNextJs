@@ -1,7 +1,7 @@
 import React,{useState,useEffect} from "react";
-import styles from "../../styles/Main.module.css";
-import api from "api/AxiosConnection";
-import { useTriggerRefreshContext } from "context/triggerRefreshContext";
+import styles from "styles/Main.module.css";
+import api from "../../src/api/AxiosConnection";
+import { useTriggerRefreshContext } from "../../src/context/triggerRefreshContext";
 import { useTranslation } from "next-i18next";
 
 export default function PastTrades(){

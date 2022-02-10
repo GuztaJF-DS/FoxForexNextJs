@@ -1,9 +1,9 @@
-import api from "api/AxiosConnection";
-import { IForexTypes } from "interfaces/IExchange";
-import { CalculateProfit } from "functions/exchangeFunctions/CalculateProfit";
-import { SearchforTheLastTrade } from "functions/exchangeFunctions/SearchforTheLastTrade";
+import api from "../../api/AxiosConnection";
+import { IForexTypes } from "../../interfaces/IExchange";
+import CalculateProfit from "./CalculateProfit";
+import SearchforTheLastTrade from "./SearchforTheLastTrade";
 
-export async function HandleExchange(id:string,CurrencyData:IForexTypes,setTriggerRefresh:any,triggerRefresh:any,setExpectProfit:any){
+export default async function HandleExchange(id:string,CurrencyData:IForexTypes,setTriggerRefresh:any,triggerRefresh:any,setExpectProfit:any){
     const now = new Date().toISOString();
     const TradeData=await SearchforTheLastTrade(id);
     const profitValues=CalculateProfit(TradeData,CurrencyData);

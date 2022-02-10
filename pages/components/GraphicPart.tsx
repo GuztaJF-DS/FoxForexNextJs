@@ -1,9 +1,9 @@
 import React,{useState,useEffect} from "react";
-import api from "api/AxiosConnection";
+import api from "../../src/api/AxiosConnection";
 import { VictoryChart,VictoryLine,VictoryVoronoiContainer,VictoryAxis } from "victory";
-import styles from "../../styles/Main.module.css";
-import { getHourEarly } from "functions/graphicFunctions/getHourEarly";
-import { getToday } from "functions/graphicFunctions/getToday";
+import styles from "styles/Main.module.css";
+import getHourForward from "../../src/functions/graphicFunctions/getHourForward";
+import getToday from "../../src/functions/graphicFunctions/getToday";
 
 export function GraphicPart(){
   const [graphicInfo,setGraphicInfo]=useState([{x:0,y:0}]);
@@ -11,11 +11,11 @@ export function GraphicPart(){
 
   useEffect(()=>{
     const now = new Date();
-    const aHourEarly=getHourEarly(now);
+    const HourForward=getHourForward(now);
     const today=getToday(now);
     
     const query={
-      StartDate:aHourEarly,
+      StartDate:HourForward,
       EndDate:today
     };
 

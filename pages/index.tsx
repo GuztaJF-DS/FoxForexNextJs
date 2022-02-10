@@ -1,12 +1,12 @@
 import Head from "next/head";
 import { useState } from "react";
-import styles from "../styles/Main.module.css";
+import styles from "styles/Main.module.css";
 import Header from "./components/Header";
 import GraphicPart from "./components/GraphicPart";
 import Exchange from "./components/Exchange";
 import PastTrades from "./components/PastTrades";
-import WebsocketConnect from "./api/WebsocketConnection";
-import { TriggerRefreshContext } from "./context/triggerRefreshContext";
+import WebsocketConnect from "../src/api/WebsocketConnection";
+import { TriggerRefreshContext } from "../src/context/triggerRefreshContext";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 export default function Home() {
