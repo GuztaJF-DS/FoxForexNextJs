@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/link-passhref */
-import styles from "styles/Main.module.css";
-import ModalStyle from "styles/Modal.module.css";
+import styles from "../../styles/Main.module.css";
+import ModalStyle from "../../styles/Modal.module.css";
 import Modal from "react-modal";
 import {useState,useEffect} from "react";
 import api from "../../src/api/AxiosConnection";
@@ -29,6 +29,10 @@ export default function Header(){
         setId(localStorage.getItem("UserId")!);
       }
     }
+    if(Message===t("Login-Message")){
+      router.reload();
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   },[Message]);
 
   useEffect(()=>{

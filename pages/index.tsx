@@ -1,6 +1,6 @@
 import Head from "next/head";
 import { useState } from "react";
-import styles from "styles/Main.module.css";
+import styles from "../styles/Main.module.css";
 import Header from "./components/Header";
 import GraphicPart from "./components/GraphicPart";
 import Exchange from "./components/Exchange";

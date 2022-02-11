@@ -1,4 +1,5 @@
-import styles from "styles/Main.module.css";
+/* eslint-disable react-hooks/exhaustive-deps */
+import styles from "../../styles/Main.module.css";
 import { useState,useEffect } from "react";
 import HandleBuyOrSell from "../../src/functions/exchangeFunctions/HandleBuyOrSell";
 import HandleExchange from "../../src/functions/exchangeFunctions/HandleExchange";
@@ -22,6 +23,7 @@ export default function Exchange(props:any){
   const [LotsInput,SetLotsInput]=useState("0");
   const [Id,SetId]=useState("");
   const [ExpectedProfit,setExpectProfit]=useState(0);
+  const [TradeColor,setTradeColor]=useState("#ffffff");
   const [TradeInfo,setTradeInfo]=useState<ITradeTypes>({
     ExchangeType: false,
     Finished: false,
@@ -55,15 +57,33 @@ export default function Exchange(props:any){
       }
     }
     fetchData();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   },[triggerRefresh]);
 
   useEffect(()=>{
     if(TradeInfo.NextOpening!==0){
       const profit=CalculateProfit(TradeInfo,CurrencyData);
+      if(TradeInfo.ExchangeType===true){
+        if(TradeInfo.NextOpening<CurrencyData.mid){
+          setTradeColor("red");
+        }
+        else{
+          setTradeColor("green");
+        }
+      }
+      else{
+        if(TradeInfo.NextOpening>CurrencyData.mid){
+          setTradeColor("red");
+        }
+        else{
+          setTradeColor("green");
+        }
+      }
+      
       setExpectProfit(profit.FinalProfit);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    else{
+      setTradeColor("#ffffff");
+    }
   },[CurrencyData]);
 
   
@@ -83,7 +103,7 @@ export default function Exchange(props:any){
 
             <div className={styles.profitColor}>
             {t("Expected-Profit")}:
-            <div>
+            <div style={{color:TradeColor}}>
                {ExpectedProfit}
             </div>
             </div>

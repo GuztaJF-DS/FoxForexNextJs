@@ -1,7 +1,7 @@
 import React,{useState,useEffect} from "react";
 import api from "../../src/api/AxiosConnection";
 import { VictoryChart,VictoryLine,VictoryVoronoiContainer,VictoryAxis } from "victory";
-import styles from "styles/Main.module.css";
+import styles from "../../styles/Main.module.css";
 import getHourForward from "../../src/functions/graphicFunctions/getHourForward";
 import getToday from "../../src/functions/graphicFunctions/getToday";
 
@@ -24,12 +24,12 @@ export function GraphicPart(){
       const FirstData=data.data.quotes[0];
       const FirstSplitedDate=(FirstData.date.split(" "));
       const FirstRealDate= FirstSplitedDate[1].substring(0,5);
-      const all=[{x:FirstRealDate,y:FirstData.close}];
+      const all=[{x:FirstRealDate,y:FirstData.close,id:0}];
       data.data.quotes.map(function(Data:any,index:number){
         if(index!=0){
           const realdate=((Data.date.split(" ")));
           const FirstRealDate= realdate[1].substring(0,5);
-          all.push({x:FirstRealDate,y:Data.close});
+          all.push({x:FirstRealDate,y:Data.close,id:index});
         }
       });
       setGraphicInfo(all);
